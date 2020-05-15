@@ -1,0 +1,8 @@
+**/target
+**/*.rs.bk
+**/build
+**/Cargo.lock
+**/log
+.idea
+.gradle
+**/.DS_Store
