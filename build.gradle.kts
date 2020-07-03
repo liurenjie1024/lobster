@@ -5,6 +5,7 @@ val scalaBinaryVersion = "2.12"
 val scalaVersion = "2.12.10"
 
 val depScalaLang by project.extra("org.scala-lang:scala-library:${scalaVersion}")
+val depScalaReflectionLang by project.extra("org.scala-lang:scala-reflect:${scalaVersion}")
 
 allprojects {
     repositories {

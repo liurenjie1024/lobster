@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     implementation(rootProject.extra["depScalaLang"] as String)
-    implementation(project(":lobster-utils"))
+    implementation(rootProject.extra["depScalaReflectionLang"] as String)
 }
 
 configure<JavaPluginConvention> {
