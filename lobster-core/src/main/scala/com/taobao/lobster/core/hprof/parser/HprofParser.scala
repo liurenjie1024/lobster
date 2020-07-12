@@ -4,14 +4,14 @@ import java.io.EOFException
 
 import com.taobao.lobster.core.hprof.model.Tag
 
-class HprofParser(private val recordReader: RecordReader, private val recordHandler: RecordHandler) {
+class HprofParser(private val recordReader: RecordInput, private val recordHandler: RecordHandler) {
   def parse(): Unit = {
     var done = false
     while(!done) {
       try {
         val tagId = recordReader.readTagId()
         Tag.getTag(tagId) match {
-          case Some(tag) => recordHandler.handle(tag.parser(recordReader))
+          case Some(tag) => println(s"Found")
           case None => println(s"Ignoring tag: ${tagId}")
         }
       } catch {
@@ -26,7 +26,7 @@ class HprofParser(private val recordReader: RecordReader, private val recordHand
 object HprofParser {
   def main(args: Array[String]): Unit = {
     val filename = "/Users/bairui.lrj/Downloads/x.hprof"
-    val parser = new HprofParser(new FileRecordReader(filename), new RecordPrinter)
+    val parser = new HprofParser(new FileRecordInput(filename), new RecordPrinter)
 
     parser.parse()
   }

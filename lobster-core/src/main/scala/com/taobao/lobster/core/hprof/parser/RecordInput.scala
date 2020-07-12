@@ -4,9 +4,9 @@ import java.io.{DataInput, DataInputStream, FileInputStream}
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 
-import com.taobao.lobster.core.hprof.model.{FormatNameSize, Header, StringRecord, TagId, _}
+import com.taobao.lobster.core.hprof.model.{FormatNameSize, Header, StringRecordBody, TagId, _}
 
-trait RecordReader extends AutoCloseable {
+trait RecordInput extends AutoCloseable {
   def idSize: Int
   def input: DataInput
 
@@ -20,18 +20,6 @@ trait RecordReader extends AutoCloseable {
       case 8 => input.readLong()
       case s => throw new IllegalStateException(s"Unrecognized id size: $s")
     }
-  }
-
-  def readString(): StringRecord = {
-    // Skip timestamp
-    input.readInt()
-
-    val len = input.readInt()
-    val bytes = new Array[Byte](len)
-    val id = readId()
-    input.readFully(bytes)
-
-    StringRecord(id, bytes)
   }
 
   def readHeader(): Header = {
@@ -55,7 +43,7 @@ trait RecordReader extends AutoCloseable {
   }
 }
 
-class FileRecordReader(filename: String) extends RecordReader {
+class FileRecordInput(filename: String) extends RecordInput {
   override val input = new DataInputStream(new FileInputStream(filename))
   private val header = readHeader()
   override val idSize: Int = header.idSize
